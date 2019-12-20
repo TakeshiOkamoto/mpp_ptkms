@@ -1,7 +1,7 @@
 # タスク&ナレッジ管理システム
 Ruby on Railsの練習用に作成したものです。 作業日数3日(Railsで3作目)
 
-DEMO  
+DEMO ※管理ユーザーでの動作
 [https://www.petitmonte.com/rails-demo/ptkms](https://www.petitmonte.com/rails-demo/ptkms)  
       
 [mpp_ptkmsの意味]  
