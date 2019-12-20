@@ -4,7 +4,7 @@ Ruby on Railsの練習用に作成したものです。 作業日数3日(Rails�
 DEMO  
 [https://www.petitmonte.com/rails-demo/ptkms](https://www.petitmonte.com/rails-demo/ptkms)  
       
-[mpp_rmsの意味]  
+[mpp_ptkmsの意味]  
 mpp = My Practice Project  
 ptkms = Project Task & Knowledge Management System 
    
