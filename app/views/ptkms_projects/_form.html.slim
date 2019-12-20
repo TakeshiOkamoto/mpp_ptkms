@@ -1,0 +1,31 @@
+- if @ptkms_project.errors.any?
+  #error_explanation.text-danger
+    ul
+      - @ptkms_project.errors.full_messages.each do |message|
+        li = message
+        
+= form_with model: @ptkms_project, local: true do |f|
+  .form-group
+    = raw '<label for="ptkms_project_name">' + PtkmsProject.human_attribute_name(:name) +'</label>'
+    = raw '&nbsp;&nbsp;' + '<span class="badge badge-success" style="font-size:16px;"> 必須 </span>'
+    = f.text_field :name, class: 'form-control', id: 'ptkms_project_name'
+  .form-group
+    = f.label :client_name
+    = f.text_field :client_name, class: 'form-control', id: 'ptkms_project_client_name'
+  .form-group
+    = f.label :p_start
+    = " (yyyy/mm/dd形式)"
+    = f.date_field :p_start, class: 'form-control', id: 'ptkms_project_p_start',style: "width:200px;" 
+  .form-group
+    = f.label :p_end
+    = " (yyyy/mm/dd形式)"
+    = f.date_field :p_end, class: 'form-control', id: 'ptkms_project_p_end' ,style: "width:200px;"    
+  .form-group
+    = f.label :info
+    = f.text_area :info, rows: 7, class: 'form-control', id: 'ptkms_project_info'  , placeholder: "ここに基本的な情報を記述します。"          
+  .form-group  style= "float:left;"
+    = f.label :show
+    = f.check_box :show, class: 'form-control', id: 'ptkms_project_show'   
+  .clearfix  
+  br 
+  = f.submit yield(:submit) , class: 'btn btn-primary'  

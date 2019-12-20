@@ -1,0 +1,94 @@
+- provide(:title, 'タスク - 表示')
+- provide(:submit, '返信する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("タスク", ptkms_tasks_path(project_id: @ptkms_task.project_id))        
+    li.breadcrumb-item.active aria-current="page" = '表示'
+        
+p
+h2 
+  = @ptkms_task.title
+  - if @ptkms_task.priority == 1
+    span = " "
+    span.badge.badge-danger style="font-size:50%" = ptkms_get_priority_from_id(@ptkms_task.priority)   
+  - elsif @ptkms_task.priority == 2
+    span = " "  
+    span.badge.badge-info  style="font-size:50%"  = ptkms_get_priority_from_id(@ptkms_task.priority)   
+  - else
+    = " [" + ptkms_get_priority_from_id(@ptkms_task.priority)  + "]"
+p
+
+/ エラー
+- if session[:ptkms_task_commnet_errors].present?
+  ul#error_explanation.text-danger
+    - session[:ptkms_task_commnet_errors].each do |message|
+      li= message
+    = session[:ptkms_task_commnet_name] = session[:ptkms_task_commnet_body]= session[:ptkms_task_commnet_attachments]= session[:ptkms_task_commnet_errors]  = nil
+
+/ コメント    
+- @ptkms_task_commnets.each  do |commnet|
+  <hr style="margin-bottom:5px;background-color:#c0c0c0;">
+  div.clearfix.mb-2  
+    div.float-left 
+      span.font-weight-bold.text-primary = commnet.name   
+      span =  raw '&nbsp;&nbsp;'
+      span = commnet.updated_at.to_s.sub(/\+0900/, '')
+  div.clearfix
+  = raw common_convert_nbsp(auto_link(simple_format(h(commnet.body), {}, sanitize: false, wrapper_tag: "p"))) 
+  
+  - if commnet.attachments.attached?
+    span= "<添付ファイル>"
+    br
+    - commnet.attachments.each do |obj| 
+      - url = rails_blob_path(obj)
+      = link_to URI.unescape(File.basename(url)),url
+      = raw "&nbsp;&nbsp;"
+    p
+    
+  -if ptkms_current_user && ptkms_current_user.admin?
+    span = link_to '編集', edit_ptkms_task_commnet_path(commnet), class: 'btn btn-primary mr-3'     
+    span = link_to '削除', commnet, method: :delete, data: { confirm: commnet.name + " さんのコメントを削除します。よろしいですか？" }, class: 'btn btn-danger' 
+    
+<hr style="margin-bottom:5px;background-color:#c0c0c0;">      
+= form_with model: @ptkms_task_commnet, url: ptkms_tasks_path(), local: true do |f|
+  .form-group
+    = f.hidden_field  "task_id", value: @ptkms_task.id    
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control', id: 'ptkms_task_commnet_name'
+  .form-group
+    = f.label :body
+    = f.text_area :body, rows: 10, class: 'form-control', id: 'ptkms_task_commnet_body'
+  .form-group
+    = f.label :attachments, "添付ファイル (複数ファイル可)"
+    = f.file_field  :attachments, multiple: true, class: 'form-control', id: 'ptkms_task_commnet_attachments'
+          
+  br 
+  = f.submit yield(:submit) , class: 'btn btn-primary' 
+
+br
+br 
+
+div
+  div.float-right
+    -if ptkms_current_user && ptkms_current_user.admin?
+      span = link_to '編集', edit_ptkms_task_path(@ptkms_task), class: 'btn btn-primary' 
+      span = raw "&nbsp;&nbsp;&nbsp;"
+      span = link_to '削除', @ptkms_task, data: { confirm: "\n#{@ptkms_task.title}\nのタスクを削除します。よろしいですか？" }, method: :delete, class: 'btn btn-danger' 
+  div.float-left
+    = link_to("戻る", ptkms_tasks_path(project_id: @ptkms_task.project_id))  
+div.clearfix    
+    
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("タスク", ptkms_tasks_path(project_id: @ptkms_task.project_id))        
+    li.breadcrumb-item.active aria-current="page" = '表示'
+    
+p    

@@ -1,0 +1,79 @@
+- provide(:title, 'プロジェクト - 表示')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item.active aria-current="page" = '表示'
+    
+p
+h2 = @ptkms_project.name
+p
+
+span = link_to 'タスク', ptkms_tasks_path(project_id: @ptkms_project.id), class: 'btn btn-outline-info' 
+span = raw "&nbsp;&nbsp;&nbsp;"
+span = link_to 'ナレッジ', ptkms_knowledges_path(project_id: @ptkms_project.id), class: 'btn btn-outline-info' 
+
+.mb-3
+div.pc
+  table.table.table-hover
+    tr
+      th style="width:150px;" =PtkmsProject.human_attribute_name(:client_name)
+      td = @ptkms_project.client_name     
+    tr
+      th =PtkmsProject.human_attribute_name(:p_start)
+      td = @ptkms_project.p_start     
+    tr
+      th =PtkmsProject.human_attribute_name(:p_end)
+      td = @ptkms_project.p_end     
+    tr
+      th =PtkmsProject.human_attribute_name(:info)
+      td = raw common_convert_nbsp(auto_link(simple_format(h(@ptkms_project.info), {}, sanitize: false, wrapper_tag: "p")))
+    tr
+      th =PtkmsProject.human_attribute_name(:show)
+      td = @ptkms_project.show     
+      
+div.sp
+  span
+    strong = PtkmsProject.human_attribute_name(:client_name) 
+    span = "： "
+    span = @ptkms_project.client_name  
+  br   
+  span
+    strong = PtkmsProject.human_attribute_name(:p_start) 
+    span = "： "
+    span = @ptkms_project.p_start  
+  br   
+  span
+    strong = PtkmsProject.human_attribute_name(:p_end) 
+    span = "： "
+    span = @ptkms_project.p_end  
+  br   
+  span
+    strong = PtkmsProject.human_attribute_name(:info) 
+    span = "： "
+    = raw common_convert_nbsp(auto_link(simple_format(h(@ptkms_project.info), {}, sanitize: false, wrapper_tag: "p"))) 
+  span
+    strong = PtkmsProject.human_attribute_name(:show) 
+    span = "： "
+    span = @ptkms_project.show  
+   
+br
+br
+div
+  div.float-right
+    - if ptkms_current_user && ptkms_current_user.admin?  
+      span = link_to '編集', edit_ptkms_project_path(@ptkms_project), class: 'btn btn-primary' 
+      span = raw "&nbsp;&nbsp;&nbsp;"
+      span = link_to '削除', @ptkms_project, data: { confirm: "\n#{@ptkms_project.name} を削除します。\nタスク/ナレッジがある場合は同時に削除されます。\nよろしいですか？" }, method: :delete, class: 'btn btn-danger' 
+  div.float-left
+    =link_to("戻る", ptkms_projects_path) 
+div.clearfix    
+    
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item.active aria-current="page" = '表示'
+    
+p    

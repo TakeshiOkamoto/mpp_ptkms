@@ -1,0 +1,25 @@
+- provide(:title, 'プロジェクト - 新規登録')
+- provide(:submit, '登録する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item.active aria-current="page" = '新規作成'
+    
+p
+h1 新規登録 - プロジェクト
+p
+
+== render 'form'
+
+br
+br
+=link_to("戻る", ptkms_projects_path) 
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item.active aria-current="page" = '新規作成'
+
+p    

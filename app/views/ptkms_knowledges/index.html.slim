@@ -1,0 +1,82 @@
+- provide(:title, 'ナレッジ')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))     
+    li.breadcrumb-item.active aria-current="page" = 'ナレッジ'
+    
+p
+h1 ナレッジ
+p
+
+= search_form_for @q, class: 'mb-5' do |f|
+  .form-group.row
+    .col-sm-10
+      = f.search_field :title_cont, class: 'form-control', placeholder: "検索したいナレッジ名を入力。"   
+  .form-check.row 
+    - if params[:q].present? && params[:q][:show_true].present?
+      = f.check_box :show_true
+    - else
+      = f.check_box :show_true, checked: true        
+    span = " " 
+    = f.label :show_true, "表示設定がオンのみを表示する"
+  .form-group    
+    = f.hidden_field :project_id, value:  @ptkms_project[0].id
+  .form-group
+    = f.submit class: 'btn btn-outline-primary'
+    
+= link_to 'ナレッジの新規登録', new_ptkms_knowledge_path(project_id: @ptkms_project[0].id),class: 'btn btn-primary' 
+
+p
+
+div.pc    
+  table.table.table-hover
+    thead.thead-default
+      tr
+        th タイトル
+        th style="width: 120px;" = "更新日時"
+        th.text-center style="width: 80px;" = '件数'
+    tbody
+      - @ptkms_knowledges.each_with_index do |knowledge,i|
+        - data = ptkms_get_name_from_data(knowledge.id)      
+        tr
+          td
+            = link_to(knowledge.title, knowledge)
+            br
+            -if data['cnt'] == "0"            
+            -elsif data['cnt'] == "1"
+              div.text-muted style="font-size:90%;" = "登録者 " + data['name1']
+            -else
+              div.text-muted style="font-size:90%;" = "登録者 " + data['name1'] + " 最終発言者 " + data['name2']
+          td = knowledge.updated_at.to_s.sub(/\+0900/, '')
+          td.text-center= data["cnt"].to_i.to_s(:delimited)
+          
+div.sp    
+  table.table.table-hover
+    thead.thead-default
+      tr
+        th タイトル
+    tbody
+      - @ptkms_knowledges.each_with_index do |knowledge,i|
+        - data = ptkms_get_name_from_data(knowledge.id)      
+        tr
+          td
+            = link_to(knowledge.title, knowledge)
+                          
+/ ページネーション
+.mb-3
+  = paginate @ptkms_knowledges
+  = page_entries_info @ptkms_knowledges
+
+p
+            
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))     
+    li.breadcrumb-item.active aria-current="page" = 'ナレッジ'
+      
+p  
+
+p     

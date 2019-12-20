@@ -1,0 +1,29 @@
+- provide(:title, 'プロジェクト - 編集')
+- provide(:submit, '更新する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project.name, ptkms_project_path(@ptkms_project))     
+    li.breadcrumb-item.active aria-current="page" = '編集'
+    
+p
+h1 プロジェクトの編集
+p
+
+== render 'form'
+
+
+br
+br
+
+=link_to("戻る", ptkms_project_path(@ptkms_project))  
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project.name, ptkms_project_path(@ptkms_project))     
+    li.breadcrumb-item.active aria-current="page" = '編集'
+    
+p    

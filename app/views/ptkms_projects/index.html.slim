@@ -1,0 +1,83 @@
+- provide(:title, 'プロジェクト')
+    
+p
+h1 プロジェクト
+p
+
+= search_form_for @q, class: 'mb-5' do |f|
+  .form-group.row
+    .col-sm-10
+      = f.search_field :name_cont, class: 'form-control', placeholder: "検索したいプロジェクト名を入力。"   
+  .form-check.row 
+    - if params[:q].present? && params[:q][:show_true].present?
+      = f.check_box :show_true
+    - else
+      = f.check_box :show_true, checked: true 
+       
+    span = " " 
+    = f.label :show_true, "表示設定がオンのみを表示する"
+  .form-group
+    = f.submit class: 'btn btn-outline-primary'
+
+- if ptkms_current_user && ptkms_current_user.admin?
+  = link_to 'プロジェクトの新規登録', new_ptkms_project_path,class: 'btn btn-primary'  
+  
+p
+
+div.pc    
+  table.table.table-hover
+    thead.thead-deテストfault
+      tr
+        th 一覧
+        th 名称
+        th style="text-align:center;" タスク
+        th style="text-align:center;" ナレッジ               
+        
+    tbody
+      - @ptkms_projects.each_with_index do |project,i|
+        - data = ptkms_get_count_from_data(project.id)
+        tr
+          td style="width:205px;"               
+           span = link_to 'タスク', ptkms_tasks_path(project_id: project.id), class: 'btn btn-outline-info' 
+           span = raw "&nbsp;&nbsp;&nbsp;"
+           span = link_to 'ナレッジ', ptkms_knowledges_path(project_id: project.id), class: 'btn btn-outline-info'       
+          td  
+           span = link_to(project.name, project)
+           br
+           - if project.p_start.present?
+            span.text-success = "開始日 " + project.p_start.to_s() + " "
+           - if project.p_end.present?
+            span.text-success = "終了日 " + project.p_end.to_s() + " "
+           - if project.client_name.present?
+            span.text-secondary style="font-size:90%;" = "<" +project.client_name + "> "            
+          td  style="text-align:center;"= data["task"].to_s(:delimited)
+          td  style="text-align:center;"= data["knowledge"].to_s(:delimited)      
+
+div.sp    
+  table.table.table-hover
+    thead.thead-deテストfault
+      tr
+        th 一覧
+        
+    tbody
+      - @ptkms_projects.each_with_index do |project,i|
+        - data = ptkms_get_count_from_data(project.id)
+        tr
+          td style="width:205px;"     
+           span = link_to(project.name, project)                      
+           br
+           br
+           span = link_to 'タスク', ptkms_tasks_path(project_id: project.id), class: 'btn btn-outline-info' 
+           span = raw "&nbsp;&nbsp;&nbsp;"
+           span = link_to 'ナレッジ', ptkms_knowledges_path(project_id: project.id), class: 'btn btn-outline-info'  
+   
+          
+             
+/ ページネーション
+.mb-3
+  = paginate @ptkms_projects
+  = page_entries_info @ptkms_projects
+  
+p  
+
+p      

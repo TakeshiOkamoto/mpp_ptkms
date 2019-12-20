@@ -1,0 +1,67 @@
+- provide(:title, 'タスク - 新規登録')
+- provide(:submit, '登録する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("タスク", ptkms_tasks_path(project_id: @ptkms_task.project_id))     
+    li.breadcrumb-item.active aria-current="page" = '新規作成'
+    
+p
+h1 新規登録 - タスク
+p
+
+- if @ptkms_task.errors.present? || @ptkms_task_commnet.errors.present?
+  ul#error_explanation.text-danger
+    - @ptkms_task.errors.full_messages.each do |message|
+      li = message
+    - @ptkms_task_commnet.errors.full_messages.each do |message|
+      li = message
+          
+= form_with model: @ptkms_task, local: true do |f|
+  .form-group 
+    = f.hidden_field :project_id, class: 'form-control', id: 'ptkms_task_project_id'   
+  .form-group
+    = raw '<label for="ptkms_task_title">' + PtkmsTask.human_attribute_name(:title) +'</label>'
+    = raw '&nbsp;&nbsp;' + '<span class="badge badge-success" style="font-size:16px;"> 必須 </span>'
+    = f.text_field :title, class: 'form-control', id: 'ptkms_task_title'
+  .form-group
+    = raw '<label for="ptkms_task_priority">' + PtkmsTask.human_attribute_name(:priority) +'</label>'    
+    = raw '&nbsp;&nbsp;' + '<span class="badge badge-success" style="font-size:16px;"> 必須 </span><br>'   
+    - if @ptkms_task.priority.present?    
+      = f.select :priority, options_for_select(@ptkms_priority_list,@ptkms_task.priority),id: 'ptkms_task_priority'
+    - else
+      = f.select :priority, options_for_select(@ptkms_priority_list,4),id: 'ptkms_task_priority'
+  .form-group  style= "float:left;"
+    = f.label :show
+    = f.check_box :show, class: 'form-control', id: 'ptkms_task_show'   
+  .clearfix  
+  
+  = f.fields_for @ptkms_task_commnet do |i| 
+    .form-group
+      = i.label :name
+      = i.text_field :name, class: 'form-control', id: 'ptkms_task_ptkms_task_commnet_name'
+    .form-group
+      = i.label :body
+      = i.text_area :body, rows: 10, class: 'form-control', id: 'ptkms_task_ptkms_task_commnet_body'
+    .form-group
+      = i.label :attachments, "添付ファイル (複数ファイル可)"
+      = i.file_field  :attachments, multiple: true, class: 'form-control', id: 'ptkms_task_ptkms_task_commnet_attachments'
+      
+  br 
+  = f.submit yield(:submit) , class: 'btn btn-primary'  
+
+br
+br
+=link_to("戻る", ptkms_tasks_path(project_id: @ptkms_task.project_id))
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("タスク", ptkms_tasks_path(project_id: @ptkms_task.project_id))       
+    li.breadcrumb-item.active aria-current="page" = '新規作成'
+
+p    

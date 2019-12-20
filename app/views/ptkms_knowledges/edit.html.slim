@@ -1,0 +1,50 @@
+- provide(:title, 'なレジz - 編集')
+- provide(:submit, '更新する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("ナレッジ", ptkms_knowledges_path(project_id: @ptkms_knowledge.project_id))        
+    li.breadcrumb-item.active aria-current="page" = '編集'
+    
+p
+h1 タスクの編集
+p
+
+- if @ptkms_knowledge.errors.any?
+  #error_explanation.text-danger
+    ul
+      - @ptkms_knowledge.errors.full_messages.each do |message|
+        li = message
+          
+= form_with model: @ptkms_knowledge, local: true do |f|
+  .form-group 
+    = f.hidden_field :project_id, class: 'form-control', id: 'ptkms_knowledge_project_id'   
+  .form-group
+    = raw '<label for="ptkms_knowledge_title">' + PtkmsKnowledge.human_attribute_name(:title) +'</label>'
+    = raw '&nbsp;&nbsp;' + '<span class="badge badge-success" style="font-size:16px;"> 必須 </span>'
+    = f.text_field :title, class: 'form-control', id: 'ptkms_knowledge_title'
+  .form-group  style= "float:left;"
+    = f.label :show
+    = f.check_box :show, class: 'form-control', id: 'ptkms_knowledge_show'   
+  .clearfix  
+
+  br 
+  = f.submit yield(:submit) , class: 'btn btn-primary' 
+  
+br
+br
+
+= link_to("戻る", ptkms_knowledge_path(id: @ptkms_knowledge.id)) 
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("ナレッジ", ptkms_knowledges_path(project_id: @ptkms_knowledge.project_id))        
+    li.breadcrumb-item.active aria-current="page" = '編集'
+    
+p
+  

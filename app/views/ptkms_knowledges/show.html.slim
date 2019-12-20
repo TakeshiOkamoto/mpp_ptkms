@@ -1,0 +1,86 @@
+- provide(:title, 'ナレッジ - 表示')
+- provide(:submit, '返信する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("ナレッジ", ptkms_knowledges_path(project_id: @ptkms_knowledge.project_id))        
+    li.breadcrumb-item.active aria-current="page" = '表示'
+        
+p
+h2 = @ptkms_knowledge.title
+
+p
+
+/ エラー
+- if session[:ptkms_knowledge_commnet_errors].present?
+  ul#error_explanation.text-danger
+    - session[:ptkms_knowledge_commnet_errors].each do |message|
+      li= message
+    = session[:ptkms_knowledge_commnet_name] = session[:ptkms_knowledge_commnet_body]= session[:ptkms_knowledge_commnet_attachments]= session[:ptkms_knowledge_commnet_errors]  = nil
+
+/ コメント    
+- @ptkms_knowledge_commnets.each  do |commnet|
+  <hr style="margin-bottom:5px;background-color:#c0c0c0;">
+  div.clearfix.mb-2  
+    div.float-left 
+      span.font-weight-bold.text-primary = commnet.name   
+      span =  raw '&nbsp;&nbsp;'
+      span = commnet.updated_at.to_s.sub(/\+0900/, '')
+  div.clearfix
+  = raw common_convert_nbsp(auto_link(simple_format(h(commnet.body), {}, sanitize: false, wrapper_tag: "p"))) 
+  
+  - if commnet.attachments.attached?
+    span= "<添付ファイル>"
+    br
+    - commnet.attachments.each do |obj| 
+      - url = rails_blob_path(obj)
+      = link_to URI.unescape(File.basename(url)),url
+      = raw "&nbsp;&nbsp;"
+    p
+    
+  - if ptkms_current_user && ptkms_current_user.admin?
+    span = link_to '編集', edit_ptkms_knowledge_commnet_path(commnet), class: 'btn btn-primary mr-3'     
+    span = link_to '削除', commnet, method: :delete, data: { confirm: commnet.name + " さんのコメントを削除します。よろしいですか？" }, class: 'btn btn-danger' 
+    
+<hr style="margin-bottom:5px;background-color:#c0c0c0;">      
+= form_with model: @ptkms_knowledge_commnet, url: ptkms_knowledges_path(), local: true do |f|
+  .form-group
+    = f.hidden_field  "knowledge_id", value: @ptkms_knowledge.id    
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control', id: 'ptkms_knowledge_commnet_name'
+  .form-group
+    = f.label :body
+    = f.text_area :body, rows: 10, class: 'form-control', id: 'ptkms_knowledge_commnet_body'
+  .form-group
+    = f.label :attachments, "添付ファイル (複数ファイル可)"
+    = f.file_field  :attachments, multiple: true, class: 'form-control', id: 'ptkms_knowledge_commnet_attachments'
+          
+  br 
+  = f.submit yield(:submit) , class: 'btn btn-primary' 
+
+br
+br 
+
+div
+  div.float-right
+    - if ptkms_current_user && ptkms_current_user.admin?  
+      span = link_to '編集', edit_ptkms_knowledge_path(@ptkms_knowledge), class: 'btn btn-primary' 
+      span = raw "&nbsp;&nbsp;&nbsp;"
+      span = link_to '削除', @ptkms_knowledge, data: { confirm: "\n#{@ptkms_knowledge.title}\nのナレッジを削除します。よろしいですか？" }, method: :delete, class: 'btn btn-danger' 
+  div.float-left
+    = link_to("戻る", ptkms_knowledges_path(project_id: @ptkms_knowledge.project_id))  
+div.clearfix    
+    
+p
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project[0].name, ptkms_project_path(id: @ptkms_project[0].id))        
+    li.breadcrumb-item =link_to("ナレッジ", ptkms_knowledges_path(project_id: @ptkms_knowledge.project_id))        
+    li.breadcrumb-item.active aria-current="page" = '表示'
+    
+p    

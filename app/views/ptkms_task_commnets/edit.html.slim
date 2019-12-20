@@ -1,0 +1,47 @@
+- provide(:title, 'コメント - 編集')
+- provide(:submit, '更新する')
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project.name, ptkms_project_path(id: @ptkms_project.id))        
+    li.breadcrumb-item =link_to("タスク", ptkms_tasks_path(project_id: @ptkms_task.project_id))   
+    li.breadcrumb-item =link_to(@ptkms_task.title, ptkms_task_path(id: @ptkms_task.id))          
+    li.breadcrumb-item.active aria-current="page" = 'コメント'
+    
+p
+h2 コメントの編集
+p
+
+- if @ptkms_task_commnet.errors.any?
+  #error_explanation.text-danger
+    ul
+      - @ptkms_task_commnet.errors.full_messages.each do |message|
+        li = message
+          
+= form_with model: @ptkms_task_commnet, local: true do |f|
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control', id: 'ptkms_task_commnet_name'
+  .form-group
+    = f.label :body
+    = f.text_area :body, rows: 10, class: 'form-control', id: 'ptkms_task_commnet_body'
+  .form-group
+    = f.label :attachments, "添付ファイル (複数ファイル可)"
+    = f.file_field  :attachments, multiple: true, class: 'form-control', id: 'ptkms_task_commnet_attachments'    
+  br 
+  = f.submit yield(:submit) , class: 'btn btn-primary'  
+
+br
+br
+=link_to("戻る", ptkms_task_path(id: @ptkms_task.id))   
+p    
+
+nav aria-label="breadcrumb"
+  ol.breadcrumb
+    li.breadcrumb-item =link_to("ホーム", ptkms_projects_path) 
+    li.breadcrumb-item =link_to(@ptkms_project.name, ptkms_project_path(id: @ptkms_project.id))        
+    li.breadcrumb-item =link_to("タスク", ptkms_tasks_path(project_id: @ptkms_task.project_id))   
+    li.breadcrumb-item =link_to(@ptkms_task.title, ptkms_task_path(id: @ptkms_task.id))          
+    li.breadcrumb-item.active aria-current="page" = 'コメント'
+p    
