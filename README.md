@@ -6,7 +6,7 @@ DEMO ※管理ユーザーでのデモ動作です。
       
 [mpp_ptkmsの意味]  
 mpp = My Practice Project  
-ptkms = Project Task & Knowledge Management System 
+ptkms = Project Task & Knowledge Management System 　
    
 ## 1. 環境
 ・Ruby 2.6.5  
