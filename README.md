@@ -46,7 +46,9 @@ node_modulesフォルダ及びyarn.lockファイルを削除していますの�
 bin/rails webpacker:install  
 ```
 ### フォルダの生成
-app/assetsにimagesフォルダを手動で生成する。※GitHubが空のディレクトリを生成できない為。  
+```rb  
+app/assetsにimagesフォルダを手動で生成する。 
+```
 ※コレを行わないと「Completed 500 Internal Server Error」になりますのでご注意。  
   
 ### CSS/JSファイルをプリコンパイルする
