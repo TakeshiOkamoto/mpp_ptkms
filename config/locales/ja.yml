@@ -1,7 +1,7 @@
 ---
 ja:
   contents:
-    title: 'タスク&ナレッジ管理システム'
+    title: 'タスク & ナレッジ管理システム'
   activerecord:
     errors:
       messages:
