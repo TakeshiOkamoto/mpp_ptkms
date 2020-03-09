@@ -16,15 +16,15 @@ html lang="ja"
     
   body
   
-    .app-title.navbar.navbar-expand-md.navbar-light.bg-primary
-     .navbar-brand.text-white
-       = ' ' +  t('contents.title')
+    .navbar.navbar-expand-md.navbar-light.bg-primary
+      .navbar-brand.text-white
+        = ' ' +  t('contents.title')
          
-     ul.navbar-nav.ml-auto
-       - if ptkms_current_user    
-         li.nav-item= link_to 'ログアウト',  logout_path, class: 'nav-link',style: "color:#fff;", method: :delete    
-       - else
-         li.nav-item= link_to 'ログイン',  login_path, class: 'nav-link',style: "color:#fff;" 
+      ul.navbar-nav.ml-auto
+        - if ptkms_current_user    
+          li.nav-item= link_to 'ログアウト',  logout_path, class: 'nav-link',style: "color:#fff;", method: :delete    
+        - else
+          li.nav-item= link_to 'ログイン',  login_path, class: 'nav-link',style: "color:#fff;" 
             
     .container
       - if flash.notice.present?
